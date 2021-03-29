@@ -3,7 +3,7 @@ from .models import *
 from insurance.utility import exception_detail
 from insurance.config import *
 
-class InsurancePolicySerializer(serializers.ModelSerializer):
+class InsurancePolicyListSerializer(serializers.ModelSerializer):
     bodily_injury_liability = serializers.SerializerMethodField()
     personal_injury_protection = serializers.SerializerMethodField()
     property_damage_liability = serializers.SerializerMethodField()
@@ -15,7 +15,7 @@ class InsurancePolicySerializer(serializers.ModelSerializer):
     vehicle_segment_name = serializers.CharField(source='vehicle_segment.name')
     gender = serializers.SerializerMethodField()
     income_group = serializers.CharField(source='customer.income_group')
-    region_id = serializers.CharField(source='customer.region.id')
+    region_id = serializers.IntegerField(source='customer.region.id')
     region_name = serializers.CharField(source='customer.region.name')
     marital_status = serializers.SerializerMethodField()
 
@@ -85,10 +85,28 @@ class InsurancePolicySerializer(serializers.ModelSerializer):
 
 
     def get_marital_status(self, obj):
-        marital_status = 'Yes'
+        marital_status = 'Single'
         try:
             if obj.customer.marital_status:
                 marital_status = DEFAULT_MARITAL_STATUS_REVERSE.get(obj.customer.marital_status)
         except Exception as e:
             exception_detail()
         return marital_status
+
+
+class InsurancePolicySerializer(serializers.ModelSerializer):
+    fuel_id = serializers.CharField(source='fuel.id')
+    vehicle_segment_id = serializers.CharField(source='vehicle_segment.id')
+    gender = serializers.IntegerField(source='customer.gender')
+    income_group = serializers.CharField(source='customer.income_group')
+    region_id = serializers.IntegerField(source='customer.region.id')
+    marital_status = serializers.BooleanField(source='customer.marital_status')
+
+
+
+    class Meta:
+        model = InsurancePolicy
+        fields = ('id', 'purchase_date', 'premium', 'bodily_injury_liability', 'personal_injury_protection',
+                  'property_damage_liability', 'collision', 'comprehensive', 'fuel_id',
+                  'vehicle_segment_id', 'customer_id', 'gender',
+                  'income_group', 'region_id', 'marital_status')

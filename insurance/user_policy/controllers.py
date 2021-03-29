@@ -171,7 +171,7 @@ class UserPolicyHomeController():
             paginator_obj = Paginator(policy_objs, page_size)
             page_obj = paginator_obj.page(page_number)
             policy_page_obj = page_obj.object_list
-            policy_serailizer = InsurancePolicySerializer(policy_page_obj, many=True)
+            policy_serailizer = InsurancePolicyListSerializer(policy_page_obj, many=True)
             policy_data['policy_data'] = policy_serailizer.data
             policy_data['total_page'] = paginator_obj.num_pages
             policy_data['has_next'] = page_obj.has_next()
@@ -198,7 +198,7 @@ class UserPolicyHomeController():
         options_data = {}
         try:
             options_data['fuel_list'] = Fuel.objects.filter().values('id', 'name')
-            options_data['vehicle_segmnet_list'] = VehicleSegment.objects.filter().values('id', 'name')
+            options_data['vehicle_segment_list'] = VehicleSegment.objects.filter().values('id', 'name')
             options_data['region_list'] = Region.objects.filter().values('id', 'name')
             success = True
             msg = 'Success in getting the Policy edit options data.'
@@ -245,4 +245,27 @@ class UserPolicyHomeController():
         except Exception as e:
             exception_detail()
         return success, msg
+
+
+    def get_insurance_policy(self, request):
+        """
+        function to get the options list need to be there in edit option of policy data
+        1. getting the data for fuel , vechile_segment and region
+        :param request:
+        :return:
+        """
+        success = False
+        msg = 'Error in getting the Policy edit options data.'
+        policy_data = {}
+        try:
+            policy_id = request.GET.get('policy_id')
+            if policy_id:
+                policy_obj = InsurancePolicy.objects.get(id=policy_id)
+                policy_serializer = InsurancePolicySerializer(policy_obj)
+                policy_data = policy_serializer.data
+            success = True
+            msg = 'Success in getting the Policy edit options data.'
+        except Exception as e:
+            exception_detail()
+        return success, msg, policy_data
 

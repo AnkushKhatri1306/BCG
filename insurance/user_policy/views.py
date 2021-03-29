@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from .controllers import UserPolicyHomeController
 from .models import InsurancePolicy
-from .serializers import InsurancePolicySerializer
+from .serializers import InsurancePolicyListSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
@@ -12,7 +12,7 @@ from insurance.utility import exception_detail
 class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
 
     queryset = InsurancePolicy.objects.all()
-    serializer_class = InsurancePolicySerializer
+    serializer_class = InsurancePolicyListSerializer
 
     @action(detail=False, methods=['POST'], url_path='data_upload')
     def policy_data_upload_api(self, request):
@@ -114,6 +114,33 @@ class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
         except Exception as e:
             exception_detail()
             response_data = get_response_object(False, 'Error in saving policy data . Please try Again')
+        return Response(data=response_data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'], url_path='get_policy')
+    def get_insurance_policy_data(self, request):
+        """
+        METHOD : POST
+        PERMISSION : ANYONE
+        HEADER TO SEND : {
+            Authorization : Bearer + <space> + <access token>
+        }
+        BODY TO SEND : {
+            "id": <id>
+        }
+        RESPONSE (SUCCESS) : {
+            "status": "success",
+            "message": "Success in saving software version."
+        }
+        :param request:
+        :return:
+        URL: upload/activate_software_version/
+        """
+        try:
+            success, msg, options_data = self.get_insurance_policy(request)
+            response_data = get_response_object(success, msg, options_data)
+        except Exception as e:
+            exception_detail()
+            response_data = get_response_object(False, 'Error in activating software version.')
         return Response(data=response_data, status=status.HTTP_200_OK)
 
 

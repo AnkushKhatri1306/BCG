@@ -166,6 +166,8 @@ class UserPolicyHomeController():
             search_id = request.GET.get('search_id')
             search_filter = Q()
             if search_id:
+                if not search_id.isdigit():
+                    return False, 'Search is not correct . Please give number as input', policy_data
                 search_filter = Q(id=search_id) | Q(customer_id=search_id)
             policy_objs = InsurancePolicy.objects.filter(search_filter).order_by('id')
             paginator_obj = Paginator(policy_objs, page_size)

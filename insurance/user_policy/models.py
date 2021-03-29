@@ -34,7 +34,7 @@ class Customer(models.Model):
 
 
 class InsurancePolicy(models.Model):
-    purchase_date = models.DateField(auto_now_add=True)
+    purchase_date = models.DateField()
     premium = models.BigIntegerField()
     bodily_injury_liability = models.BooleanField(default=0)
     personal_injury_protection = models.BooleanField(default=0)

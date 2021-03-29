@@ -75,7 +75,9 @@ class UserPolicyHomeController():
             create_list = []
             for row in csv_reader:
                 policy_obj = InsurancePolicy()
-                policy_obj.purchase_date = row.get('Date of Purchase')
+                split_data = row.get('Date of Purchase').split('/')
+                purchase_date = '-'.join([split_data[2], split_data[0], split_data[1]])
+                policy_obj.purchase_date = purchase_date
                 policy_obj.premium = row.get('Premium')
                 policy_obj.bodily_injury_liability = row.get('bodily injury liability')
                 policy_obj.personal_injury_protection = row.get(' personal injury protection')

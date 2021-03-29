@@ -25,9 +25,23 @@
 	color: #212844;
 	padding: 4px 16px;
 }
-.search-icon{
-    right: -10px;
-    position: absolute;
-    font-size: 19px;
-    color: #4798dc;
+
+.policyYear{
+    width: 150px;
+    float: right;
+}
+
+.width-serachInput{
+   width:350px 
+}
+
+.table-wordWrap{
+    white-space: nowrap;
+    font-size: 12px;
+}
+.t-a-c{
+    text-align: center;
+}
+.f-s-100px{
+    font-size: 100px;
 }

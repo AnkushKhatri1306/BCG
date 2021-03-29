@@ -1,273 +1,323 @@
-<div class="col-md-12">
-    <div class="col-md-12">
-        <div class="col-md-4">
-            <div class="col-md-12">Customer Region</div>
-            <div class="col-md-12">
-                <select  class='form-control' [(ngModel)]="graphYear" [value]='graphYear'
-                            name="region_id">
-                        <option *ngFor="let graph of policyOptions.graph_year_list let graph_index = index" [selected]="graphYear == graph"
-                    [value]="graph">{{ graph }}</option>
-                </select>
-            </div> 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Insurance Policy - BCG</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <!-- <a class="nav-item nav-link active" href="#">Features</a> -->
         </div>
-        <app-chart></app-chart>
+    </div>
+</nav>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <!-- <li class="breadcrumb-item active" aria-current="page">Home</li> -->
+
+    </ol>
+</nav>
+<div class="container-fluid">
+    <div class="col-md-12" *ngIf="graphYear">
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="policyYear">
+                    <div *ngIf="graphYear">
+                        <select class='form-control' [(ngModel)]="graphYear" [value]='graphYear' name="region_id">
+                            <option *ngFor="let graph of policyOptions.graph_year_list let graph_index = index"
+                                [selected]="graphYear == graph" [value]="graph">{{ graph }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" *ngIf="graphData">
+                <app-chart [chartData]="graphData"></app-chart>
+            </div>
+            <div class="card-body t-a-c" *ngIf="!graphData">
+                <i class="fa fa-spinner fa-spin f-s-100px"></i>
+            </div>
+        </div>
     </div>
     <div class="col-md-12">
-        <div class="col-md-12">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <input class="col-md-12" type="search" [(ngModel)]="searchText" name="search"
-                        placeholder="Serach with customer or policy id" (keyup.enter)="getInsurancePolicyData()">
-                <span class="hand-pointer search-icon" (click)="getInsurancePolicyData()"><i class="fa fa-search"></i></span>
+        <div class="card">
+            <div class="card-header">               
+                <div class="input-group">
+                    <div class="form-outline">
+                        <input type="search" [(ngModel)]="searchText" name="search"
+                            placeholder="Serach with customer or policy id" (keyup.enter)="getInsurancePolicyData()" 
+                            class="form-control width-serachInput"/>
+                    </div>
+                    <button type="button" (click)="getInsurancePolicyData()" class="btn btn-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
             </div>
-            <div class="col-md-3"></div>
-        </div>
-        <table class="col-md-12 table table-hover table-bordered">
-            <thead>
-                <tr class="col-md-12">
-                    <th>S.No.</th>
-                    <th>Policy ID</th>
-                    <th>Date Of Purchase</th>
-                    <th>Customer ID</th>
-                    <th>Fuel</th>
-                    <th>Vehicle Segment</th>
-                    <th>Premium</th>
-                    <th>Bodily Injury Liability</th>
-                    <th>Personal Injury Protection</th>
-                    <th>Property Damage Liability</th>
-                    <th>Collision</th>
-                    <th>Comprehensive</th>
-                    <th>Customer Gender</th>
-                    <th>Customer Income Group</th>
-                    <th>Customer Region</th>
-                    <th>Customer Marital status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- <tr *ngIf="false" class="text-center saListBody">
-                    <td scope="row" colspan="12" style="text-align: center;">
-                        
-                    </td>
-                </tr> -->
-                <ng-container>
-                    <tr *ngFor="let policyData of policyDataList; let index=index;"
-                        class="">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ policyData.id }}</td>
-                        <td>{{ policyData.purchase_date }}</td>
-                        <td>{{ policyData.customer_id }}</td>
-                        <td>{{ policyData.fuel_name }}</td>
-                        <td>{{ policyData.vehicle_segment_name }}</td>
-                        <td>{{ policyData.premium }}</td>
-                        <td>{{ policyData.bodily_injury_liability }}</td>
-                        <td>{{ policyData.personal_injury_protection }}</td>
-                        <td>{{ policyData.property_damage_liability }}</td>
-                        <td>{{ policyData.collision }}</td>
-                        <td>{{ policyData.comprehensive }}</td>
-                        <td>{{ policyData.gender }}</td>
-                        <td>{{ policyData.income_group }}</td>
-                        <td>{{ policyData.region_name }}</td>
-                        <td>{{ policyData.marital_status }}</td>
-                        <td>
-                            <a class="hand-pointer" title="Edit" (click)="editInsurancePolicy(policyData)">
-                                <i class="fa fa-edit color-blue"></i></a>
-                        </td>
-                    </tr>
-                </ng-container>
-            </tbody>
-        </table>
-        <div class="col-md-12 p-b-20px p-t-10px row" *ngIf="getPolicyResponseData">
-                
-            <div class="col-md-4">
-                Page : {{ pageNumber }} of {{ getPolicyResponseData.total_page }}
-            </div>      
-            <div class="col-md-4">
-                Showing {{ getPolicyResponseData.start_index }} - {{ getPolicyResponseData.end_index }} of {{ getPolicyResponseData.count }}
-                <input class="col-md-2"  title="press enter after number" min="1" [(ngModel)]="policyPageNumberSearch" (keyup.enter)="setInsurancePolicyPage(policyPageNumberSearch)" type="number">
-            </div>          
-            <div class="col-md-4 t-a-r f-s-20px">
-                <span [ngClass]="getPolicyResponseData.has_previous ? 'active' : 'unactive'" class="m-r-10px" 
-                 (click)="setInsurancePolicyPage(1)" title="First page">
-                    <i class="fa fa-angle-double-left"></i>
-                </span>
-                <span [ngClass]=" getPolicyResponseData.has_previous ? 'active' : 'unactive'" 
-                    (click)="setInsurancePolicyPage(pageNumber - 1)" class="m-r-10px" title="Previous page">
-                    <i class="fa fa-angle-left"></i>
-                </span>
-                <span [ngClass]=" getPolicyResponseData.has_next ? 'active' : 'unactive' " (click)="setInsurancePolicyPage(pageNumber + 1)" 
-                        class="m-r-10px" title="Next page">
-                    <i class="fa fa-angle-right"></i>
-                </span>
-                <span [ngClass]=" getPolicyResponseData.has_next ? 'active' : 'unactive' " (click)="setInsurancePolicyPage(getPolicyResponseData.total_page)" 
-                        class="m-r-10px" title="Last page">
-                    <i class="fa fa-angle-double-right"></i>
-                </span>
+            <div class="card-body">
+                <table class="table-responsive table table-hover table-bordered table-wordWrap">
+                    <thead>
+                        <tr class="col-md-12 bg-primary text-white">
+                            <th>S.No.</th>
+                            <th>Policy ID</th>
+                            <th>Date Of Purchase</th>
+                            <th>Customer ID</th>
+                            <th>Fuel</th>
+                            <th>Vehicle Segment</th>
+                            <th>Premium</th>
+                            <th>Bodily Injury Liability</th>
+                            <th>Personal Injury Protection</th>
+                            <th>Property Damage Liability</th>
+                            <th>Collision</th>
+                            <th>Comprehensive</th>
+                            <th>Customer Gender</th>
+                            <th>Customer Income Group</th>
+                            <th>Customer Region</th>
+                            <th>Customer Marital status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngIf="false" class="text-center saListBody">
+                            <td scope="row" colspan="12" style="text-align: center;">
+                                
+                            </td>
+                        </tr> -->
+                        <ng-container>
+                            <tr *ngFor="let policyData of policyDataList; let index=index;" class="">
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ policyData.id }}</td>
+                                <td>{{ policyData.purchase_date }}</td>
+                                <td>{{ policyData.customer_id }}</td>
+                                <td>{{ policyData.fuel_name }}</td>
+                                <td>{{ policyData.vehicle_segment_name }}</td>
+                                <td>{{ policyData.premium }}</td>
+                                <td>{{ policyData.bodily_injury_liability }}</td>
+                                <td>{{ policyData.personal_injury_protection }}</td>
+                                <td>{{ policyData.property_damage_liability }}</td>
+                                <td>{{ policyData.collision }}</td>
+                                <td>{{ policyData.comprehensive }}</td>
+                                <td>{{ policyData.gender }}</td>
+                                <td>{{ policyData.income_group }}</td>
+                                <td>{{ policyData.region_name }}</td>
+                                <td>{{ policyData.marital_status }}</td>
+                                <td>
+                                    <a class="hand-pointer" title="Edit" (click)="editInsurancePolicy(policyData)">
+                                        <i class="fa fa-edit color-blue"></i></a>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <div class="col-md-12 p-b-20px p-t-10px row" *ngIf="getPolicyResponseData">
+
+                    <div class="col-md-4">
+                        Page : {{ pageNumber }} of {{ getPolicyResponseData.total_page }}
+                    </div>
+                    <div class="col-md-4">
+                        Showing {{ getPolicyResponseData.start_index }} - {{ getPolicyResponseData.end_index }} of {{
+                        getPolicyResponseData.count }}
+                        <input class="col-md-2" title="press enter after number" min="1"
+                            [(ngModel)]="policyPageNumberSearch"
+                            (keyup.enter)="setInsurancePolicyPage(policyPageNumberSearch)" type="number">
+                    </div>
+                    <div class="col-md-4 t-a-r f-s-20px">
+                        <span [ngClass]="getPolicyResponseData.has_previous ? 'active' : 'unactive'" class="m-r-10px"
+                            (click)="setInsurancePolicyPage(1)" title="First page">
+                            <i class="fa fa-angle-double-left"></i>
+                        </span>
+                        <span [ngClass]=" getPolicyResponseData.has_previous ? 'active' : 'unactive'"
+                            (click)="setInsurancePolicyPage(pageNumber - 1)" class="m-r-10px" title="Previous page">
+                            <i class="fa fa-angle-left"></i>
+                        </span>
+                        <span [ngClass]=" getPolicyResponseData.has_next ? 'active' : 'unactive' "
+                            (click)="setInsurancePolicyPage(pageNumber + 1)" class="m-r-10px" title="Next page">
+                            <i class="fa fa-angle-right"></i>
+                        </span>
+                        <span [ngClass]=" getPolicyResponseData.has_next ? 'active' : 'unactive' "
+                            (click)="setInsurancePolicyPage(getPolicyResponseData.total_page)" class="m-r-10px"
+                            title="Last page">
+                            <i class="fa fa-angle-double-right"></i>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
-        
+
+
     </div>
 </div>
 
-    <div class="modal fade" id="showMoreModal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content col-md-12" *ngIf="openPopup">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Insurance Policy : {{ policyData.id }}</h5>
+<div class="modal fade" id="showMoreModal"  role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content col-md-12" *ngIf="openPopup">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Insurance Policy : {{ policyData.id }}</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form #policyForm="ngForm" class="col-md-12">
-                        <div class="col-md-12 row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">Date Of Purchase</div>
-                                <div class="col-md-12">
-                                    <input type="date" name="purchase_date" [value]="policyData.purchase_date" disabled="true"/>
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">Customer ID</div>
-                                <div class="col-md-12">
-                                    <input type="text" name="customer_id" [value]="policyData.customer_id" disabled="true"/>
-                                </div> 
+            </div>
+            <div class="modal-body">
+                <form #policyForm="ngForm" class="col-md-12">
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">Date Of Purchase</div>
+                            <div class="col-md-12">
+                                <input type="date" name="purchase_date" [value]="policyData.purchase_date"
+                                    disabled="true" />
                             </div>
                         </div>
-                        <div class="col-md-12 row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">Customer Gender</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.gender" 
-                                            [value]='policyData.gender' name="gender">
-                                            <option value=0>Male</option>
-                                            <option value=1>Female</option>
-                                    </select>   
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">Customer Income Group</div>
-                                <div class="col-md-12">
-                                    <input type="text" [value]="policyData.income_group" [(ngModel)]="policyData.income_group"
-                                            name="income_group"/>
-                                </div> 
+                        <div class="col-md-6">
+                            <div class="col-md-12">Customer ID</div>
+                            <div class="col-md-12">
+                                <input type="text" name="customer_id" [value]="policyData.customer_id"
+                                    disabled="true" />
                             </div>
                         </div>
-                        <div class="col-md-12 row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">Customer Region</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.region_id" [value]='policyData.region_id'
-                                             name="region_id">
-                                            <option *ngFor="let region of policyOptions.region_list let region_index = index" [selected]="policyData.region_id == region.id"
-                                        [value]="region.id">{{ region.name }}</option>
-                                    </select>
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">Customer Marital Status</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.marital_status"
-                                     [value]='policyData.marital_status' name="marital_status">
-                                        <option [ngValue]=true [selected]="policyData.marital_status==true">Married</option>
-                                        <option [ngValue]=false [selected]="policyData.marital_status==false">Single</option>
-                                    </select>  
-                                </div> 
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">Customer Gender</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.gender" [value]='policyData.gender'
+                                    name="gender">
+                                    <option value=0>Male</option>
+                                    <option value=1>Female</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-12 row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">Fuel</div>
-                                <div class="col-md-12">
-                                    <select name="fuel_id"  class='form-control' [(ngModel)]="policyData.fuel_id" [value]='policyData.fuel_id'>
-                                            <option *ngFor="let fuel of policyOptions.fuel_list let fuel_index = index" [selected]="policyData.fuel_id == fuel.id"
-                                        [value]="fuel.id">{{ fuel.name }}</option>
-                                    </select>
-                                </div> 
+                        <div class="col-md-6">
+                            <div class="col-md-12">Customer Income Group</div>
+                            <div class="col-md-12">
+                                <input type="text" [value]="policyData.income_group"
+                                    [(ngModel)]="policyData.income_group" name="income_group" />
                             </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">Vehicle Segment</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.vehicle_segment_id" 
+                        </div>
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">Customer Region</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.region_id"
+                                    [value]='policyData.region_id' name="region_id">
+                                    <option *ngFor="let region of policyOptions.region_list let region_index = index"
+                                        [selected]="policyData.region_id == region.id" [value]="region.id">{{
+                                        region.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-12">Customer Marital Status</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.marital_status"
+                                    [value]='policyData.marital_status' name="marital_status">
+                                    <option [ngValue]=true [selected]="policyData.marital_status==true">Married</option>
+                                    <option [ngValue]=false [selected]="policyData.marital_status==false">Single
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">Fuel</div>
+                            <div class="col-md-12">
+                                <select name="fuel_id" class='form-control' [(ngModel)]="policyData.fuel_id"
+                                    [value]='policyData.fuel_id'>
+                                    <option *ngFor="let fuel of policyOptions.fuel_list let fuel_index = index"
+                                        [selected]="policyData.fuel_id == fuel.id" [value]="fuel.id">{{ fuel.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-12">Vehicle Segment</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.vehicle_segment_id"
                                     [value]='policyData.vehicle_segment_id' name="vehicle_segment_id">
-                                        <option *ngFor="let vehicle_segment of policyOptions.vehicle_segment_list let vehicle_segment_index = index" 
+                                    <option
+                                        *ngFor="let vehicle_segment of policyOptions.vehicle_segment_list let vehicle_segment_index = index"
                                         [selected]="policyData.vehicle_segment_id == vehicle_segment.id"
                                         [value]="vehicle_segment.id">{{ vehicle_segment.name }}</option>
-                                    </select>  
-                                </div> 
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-12 row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">Premium</div>
-                                <div class="col-md-12">
-                                    <input type="number" [value]="policyData.premium" [(ngModel)]="policyData.premium"
-                                           name="premium" min="0" max="1000000" required/>
-                                </div> 
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">Premium</div>
+                            <div class="col-md-12">
+                                <input type="number" [value]="policyData.premium" [(ngModel)]="policyData.premium"
+                                    name="premium" min="0" max="1000000" required />
                             </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">Bodily Injury Liability</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.bodily_injury_liability" 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-12">Bodily Injury Liability</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.bodily_injury_liability"
                                     [value]='policyData.bodily_injury_liability' name="bodily_injury_liability">
-                                        <option [ngValue]="true" [selected]="policyData.bodily_injury_liability==true">Yes</option>
-                                        <option [ngValue]="false" [selected]="policyData.bodily_injury_liability==false">No</option>
-                                    </select>  
-                                </div> 
+                                    <option [ngValue]="true" [selected]="policyData.bodily_injury_liability==true">Yes
+                                    </option>
+                                    <option [ngValue]="false" [selected]="policyData.bodily_injury_liability==false">No
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-12 row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">Personal Injury Protection</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.personal_injury_protection" 
-                                            [value]='policyData.personal_injury_protection' name="personal_injury_protection">
-                                        <option [ngValue]="true" [selected]="policyData.personal_injury_protection==true">Yes</option>
-                                        <option [ngValue]="false" [selected]="policyData.personal_injury_protection==false">No</option>
-                                    </select> 
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">Property damage Liability</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.property_damage_liability" 
-                                            [value]='policyData.property_damage_liability' name="property_damage_liability">
-                                        <option [ngValue]="true" [selected]="policyData.property_damage_liability==true">Yes</option>
-                                        <option [ngValue]="false" [selected]="policyData.property_damage_liability==false">No</option>
-                                    </select>  
-                                </div> 
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">Personal Injury Protection</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.personal_injury_protection"
+                                    [value]='policyData.personal_injury_protection' name="personal_injury_protection">
+                                    <option [ngValue]="true" [selected]="policyData.personal_injury_protection==true">
+                                        Yes</option>
+                                    <option [ngValue]="false" [selected]="policyData.personal_injury_protection==false">
+                                        No</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-12 row">
-                            <div class="col-md-6">
-                                <div class="col-md-12">Collision</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.collision" 
-                                            [value]='policyData.collision' name="collision">
-                                        <option [ngValue]=true [selected]="policyData.collision==true">Yes</option>
-                                        <option [ngValue]=false [selected]="policyData.collision==false">No</option>
-                                    </select> 
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">Comprehensive</div>
-                                <div class="col-md-12">
-                                    <select  class='form-control' [(ngModel)]="policyData.comprehensive" 
-                                            [value]='policyData.comprehensive' name="comprehensive">
-                                        <option [ngValue]=true [selected]="policyData.comprehensive==true">Yes</option>
-                                        <option [ngValue]=false [selected]="policyData.comprehensive==false">No</option>
-                                    </select>  
-                                </div> 
+                        <div class="col-md-6">
+                            <div class="col-md-12">Property damage Liability</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.property_damage_liability"
+                                    [value]='policyData.property_damage_liability' name="property_damage_liability">
+                                    <option [ngValue]="true" [selected]="policyData.property_damage_liability==true">Yes
+                                    </option>
+                                    <option [ngValue]="false" [selected]="policyData.property_damage_liability==false">
+                                        No</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-info save-btn" (click)="saveInsurancePolicy()"
-                                    [disabled]="policyForm.invalid"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">Collision</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.collision"
+                                    [value]='policyData.collision' name="collision">
+                                    <option [ngValue]=true [selected]="policyData.collision==true">Yes</option>
+                                    <option [ngValue]=false [selected]="policyData.collision==false">No</option>
+                                </select>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-md-6">
+                            <div class="col-md-12">Comprehensive</div>
+                            <div class="col-md-12">
+                                <select class='form-control' [(ngModel)]="policyData.comprehensive"
+                                    [value]='policyData.comprehensive' name="comprehensive">
+                                    <option [ngValue]=true [selected]="policyData.comprehensive==true">Yes</option>
+                                    <option [ngValue]=false [selected]="policyData.comprehensive==false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-info save-btn" (click)="saveInsurancePolicy()"
+                            [disabled]="policyForm.invalid"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div> 
+    </div>
+</div>
 
-    <span class="toaster" [hidden]="!showToaster" [ngClass]="{'toaster-success': successFlag == true, 'toaster-error' : successFlag == false}">
-        {{ toasterMessage }}
-    </span>
+<span class="toaster" [hidden]="!showToaster"
+    [ngClass]="{'toaster-success': successFlag == true, 'toaster-error' : successFlag == false}">
+    {{ toasterMessage }}
+</span>

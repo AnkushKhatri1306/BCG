@@ -11,9 +11,8 @@
 .toaster{
     position: fixed;
     right: 15px;
-    bottom: 0px;
+    bottom: 5px;
     border-radius: 10px;
-    height: 50px;
     color: white;
     width: 300px;
     padding: 10px;

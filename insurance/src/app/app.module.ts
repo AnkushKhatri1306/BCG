@@ -8,13 +8,15 @@ import { UserPolicyComponent } from './user-policy/user-policy.component';
 import { UserpolicyService } from './_services/userpolicy.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ChartComponent } from './chart/chart.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserPolicyComponent
+    UserPolicyComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,

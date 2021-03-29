@@ -1,5 +1,14 @@
 <div class="col-md-12">
     <div class="col-md-12">
+        <div class="col-md-12">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <input class="col-md-12" type="search" [(ngModel)]="searchText" name="search"
+                        placeholder="Serach with customer or policy id" (keyup.enter)="getInsurancePolicyData()">
+                <span class="hand-pointer search-icon" (click)="getInsurancePolicyData()"><i class="fa fa-search"></i></span>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
         <table class="col-md-12 table table-hover table-bordered">
             <thead>
                 <tr class="col-md-12">
@@ -95,141 +104,157 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">Date Of Purchase</div>
-                            <div class="col-md-12">
-                                <input type="date" [value]="policyData.purchase_date" disabled="true"/>
-                            </div> 
+                    <form #policyForm="ngForm" class="col-md-12">
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">Date Of Purchase</div>
+                                <div class="col-md-12">
+                                    <input type="date" name="purchase_date" [value]="policyData.purchase_date" disabled="true"/>
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">Customer ID</div>
+                                <div class="col-md-12">
+                                    <input type="text" name="customer_id" [value]="policyData.customer_id" disabled="true"/>
+                                </div> 
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">Customer ID</div>
-                            <div class="col-md-12">
-                                <input type="text" [value]="policyData.customer_id" disabled="true"/>
-                            </div> 
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">Customer Gender</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.gender" 
+                                            [value]='policyData.gender' name="gender">
+                                            <option value=0>Male</option>
+                                            <option value=1>Female</option>
+                                    </select>   
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">Customer Income Group</div>
+                                <div class="col-md-12">
+                                    <input type="text" [value]="policyData.income_group" [(ngModel)]="policyData.income_group"
+                                            name="income_group"/>
+                                </div> 
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">Customer Gender</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.gender" 
-                                        [value]='policyData.gender'>
-                                        <option value=0>Male</option>
-                                        <option value=1>Female</option>
-                                </select>   
-                            </div> 
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">Customer Region</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.region_id" [value]='policyData.region_id'
+                                             name="region_id">
+                                            <option *ngFor="let region of policyOptions.region_list let region_index = index" [selected]="policyData.region_id == region.id"
+                                        [value]="region.id">{{ region.name }}</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">Customer Marital Status</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.marital_status"
+                                     [value]='policyData.marital_status' name="marital_status">
+                                        <option [ngValue]=true [selected]="policyData.marital_status==true">Married</option>
+                                        <option [ngValue]=false [selected]="policyData.marital_status==false">Single</option>
+                                    </select>  
+                                </div> 
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">Customer Income Group</div>
-                            <div class="col-md-12">
-                                <input type="text" [value]="policyData.income_group" [(ngModel)]="policyData.income_group"/>
-                            </div> 
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">Fuel</div>
+                                <div class="col-md-12">
+                                    <select name="fuel_id"  class='form-control' [(ngModel)]="policyData.fuel_id" [value]='policyData.fuel_id'>
+                                            <option *ngFor="let fuel of policyOptions.fuel_list let fuel_index = index" [selected]="policyData.fuel_id == fuel.id"
+                                        [value]="fuel.id">{{ fuel.name }}</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">Vehicle Segment</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.vehicle_segment_id" 
+                                    [value]='policyData.vehicle_segment_id' name="vehicle_segment_id">
+                                        <option *ngFor="let vehicle_segment of policyOptions.vehicle_segment_list let vehicle_segment_index = index" 
+                                        [selected]="policyData.vehicle_segment_id == vehicle_segment.id"
+                                        [value]="vehicle_segment.id">{{ vehicle_segment.name }}</option>
+                                    </select>  
+                                </div> 
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">Customer Region</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.region_id" [value]='policyData.region_id'>
-                                        <option *ngFor="let region of policyOptions.region_list let region_index = index" [selected]="policyData.region_id == region.id"
-                                    [value]="region.id">{{ region.name }}</option>
-                                </select>
-                            </div> 
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">Premium</div>
+                                <div class="col-md-12">
+                                    <input type="number" [value]="policyData.premium" [(ngModel)]="policyData.premium"
+                                           name="premium" min="0" max="1000000" required/>
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">Bodily Injury Liability</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.bodily_injury_liability" 
+                                    [value]='policyData.bodily_injury_liability' name="bodily_injury_liability">
+                                        <option [ngValue]="true" [selected]="policyData.bodily_injury_liability==true">Yes</option>
+                                        <option [ngValue]="false" [selected]="policyData.bodily_injury_liability==false">No</option>
+                                    </select>  
+                                </div> 
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">Customer Marital Status</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.marital_status" [value]='policyData.marital_status'>
-                                    <option [ngValue]=true [selected]="policyData.marital_status==true">Married</option>
-                                    <option [ngValue]=false [selected]="policyData.marital_status==false">Single</option>
-                                </select>  
-                            </div> 
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">Personal Injury Protection</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.personal_injury_protection" 
+                                            [value]='policyData.personal_injury_protection' name="personal_injury_protection">
+                                        <option [ngValue]="true" [selected]="policyData.personal_injury_protection==true">Yes</option>
+                                        <option [ngValue]="false" [selected]="policyData.personal_injury_protection==false">No</option>
+                                    </select> 
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">Property damage Liability</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.property_damage_liability" 
+                                            [value]='policyData.property_damage_liability' name="property_damage_liability">
+                                        <option [ngValue]="true" [selected]="policyData.property_damage_liability==true">Yes</option>
+                                        <option [ngValue]="false" [selected]="policyData.property_damage_liability==false">No</option>
+                                    </select>  
+                                </div> 
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">Fuel</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.fuel_id" [value]='policyData.fuel_id'>
-                                        <option *ngFor="let fuel of policyOptions.fuel_list let fuel_index = index" [selected]="policyData.fuel_id == fuel.id"
-                                    [value]="fuel.id">{{ fuel.name }}</option>
-                                </select>
-                            </div> 
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">Collision</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.collision" 
+                                            [value]='policyData.collision' name="collision">
+                                        <option [ngValue]=true [selected]="policyData.collision==true">Yes</option>
+                                        <option [ngValue]=false [selected]="policyData.collision==false">No</option>
+                                    </select> 
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">Comprehensive</div>
+                                <div class="col-md-12">
+                                    <select  class='form-control' [(ngModel)]="policyData.comprehensive" 
+                                            [value]='policyData.comprehensive' name="comprehensive">
+                                        <option [ngValue]=true [selected]="policyData.comprehensive==true">Yes</option>
+                                        <option [ngValue]=false [selected]="policyData.comprehensive==false">No</option>
+                                    </select>  
+                                </div> 
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">Vehicle Segment</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.vehicle_segment_id" [value]='policyData.vehicle_segment_id'>
-                                    <option *ngFor="let vehicle_segment of policyOptions.vehicle_segment_list let vehicle_segment_index = index" 
-                                    [selected]="policyData.vehicle_segment_id == vehicle_segment.id"
-                                    [value]="vehicle_segment.id">{{ vehicle_segment.name }}</option>
-                                </select>  
-                            </div> 
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-info save-btn" (click)="saveInsurancePolicy()"
+                                    [disabled]="policyForm.invalid"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
                         </div>
-                    </div>
-                    <div class="col-md-12 row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">Premium</div>
-                            <div class="col-md-12">
-                                <input type="number" [value]="policyData.premium" [(ngModel)]="policyData.premium"/>
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">Bodily Injury Liability</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.bodily_injury_liability" [value]='policyData.bodily_injury_liability'>
-                                    <option [ngValue]="true" [selected]="policyData.bodily_injury_liability==true">Yes</option>
-                                    <option [ngValue]="false" [selected]="policyData.bodily_injury_liability==false">No</option>
-                                </select>  
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="col-md-12 row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">Personal Injury Protection</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.personal_injury_protection" [value]='policyData.personal_injury_protection'>
-                                    <option [ngValue]="true" [selected]="policyData.personal_injury_protection==true">Yes</option>
-                                    <option [ngValue]="false" [selected]="policyData.personal_injury_protection==false">No</option>
-                                </select> 
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">Property damage Liability</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.property_damage_liability" [value]='policyData.property_damage_liability'>
-                                    <option [ngValue]="true" [selected]="policyData.property_damage_liability==true">Yes</option>
-                                    <option [ngValue]="false" [selected]="policyData.property_damage_liability==false">No</option>
-                                </select>  
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="col-md-12 row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">Collision</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.collision" [value]='policyData.collision'>
-                                    <option [ngValue]=true [selected]="policyData.collision==true">Yes</option>
-                                    <option [ngValue]=false [selected]="policyData.collision==false">No</option>
-                                </select> 
-                            </div> 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">Comprehensive</div>
-                            <div class="col-md-12">
-                                <select  class='form-control' [(ngModel)]="policyData.comprehensive" [value]='policyData.comprehensive'>
-                                    <option [ngValue]=true [selected]="policyData.comprehensive==true">Yes</option>
-                                    <option [ngValue]=false [selected]="policyData.comprehensive==false">No</option>
-                                </select>  
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <button type="button" class="btn btn-info saveBtn" (click)="saveInsurancePolicy()"
-								[disabled]="false"><i class="fa fa-check"   aria-hidden="true"></i> Save</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div> 
+
+    <span class="toaster" [hidden]="!showToaster" [ngClass]="{'toaster-success': successFlag == true, 'toaster-error' : successFlag == false}">
+        {{ toasterMessage }}
+    </span>

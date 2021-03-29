@@ -15,8 +15,11 @@ export class UserPolicyComponent implements OnInit {
   policyDataList: any;
   getPolicyResponseData: any;
   openPopup: boolean = false; 
+  showToaster: boolean = false; 
+  successFlag: boolean = false; 
   policyDataParams: any;
   searchText: any = '';
+  toasterMessage: any = '';
   pageSize: number = 10;
   pageNumber: number = 1;
   policyData: any;
@@ -42,8 +45,10 @@ export class UserPolicyComponent implements OnInit {
       if(resp.status = 'success'){
         this.getPolicyResponseData = resp.data;
         this.policyDataList = resp.data.policy_data;
-        // console.log(this.policyDataList);
-        
+        this.callToaster(resp.message, true);
+      }
+      else{
+          this.callToaster(resp.message, false);
       }
     },
     error => {
@@ -55,6 +60,10 @@ export class UserPolicyComponent implements OnInit {
       this.policyService.savePolicyData(this.policyData).subscribe(resp => {
         if(resp.status == 'success'){
           this.openPopup = false;
+          this.callToaster(resp.message, true);
+        }
+        else{
+            this.callToaster(resp.message, false);
         }
       },
       error => {
@@ -66,6 +75,10 @@ export class UserPolicyComponent implements OnInit {
       this.policyService.getInsurancePolicyOptions().subscribe(resp => {
         if(resp.status == 'success'){
           this.policyOptions = resp.data;
+          this.callToaster(resp.message, true);
+        }
+        else{
+            this.callToaster(resp.message, false);
         }
       },
       error => {
@@ -84,6 +97,10 @@ export class UserPolicyComponent implements OnInit {
           this.policyData = resp.data;
           this.openPopup = true;
           $("#showMoreModal").modal('show');     
+          this.callToaster(resp.message, true);
+        }
+        else{
+            this.callToaster(resp.message, false);
         }
       },
       error => {
@@ -111,10 +128,23 @@ export class UserPolicyComponent implements OnInit {
           this.openPopup = false;
           this.getInsurancePolicyData();
           
+          this.callToaster(resp.message, true);
+        }
+        else{
+            this.callToaster(resp.message, false);
         }
       },
       error => {
 
       });
     }
+
+    callToaster(message, successFlag){
+      this.toasterMessage = message;
+      this.successFlag = successFlag;
+      this.showToaster = true;
+      setTimeout(()=>{
+        this.showToaster = false;
+      }, 3000);
+  }
 }

@@ -19,3 +19,15 @@
 .m-r-10px{
     margin-right: 10px;
 }
+.save-btn{
+	background-color: #e3e8fe;
+	border-color: #cbd4fd;
+	color: #212844;
+	padding: 4px 16px;
+}
+.search-icon{
+    right: -10px;
+    position: absolute;
+    font-size: 19px;
+    color: #4798dc;
+}

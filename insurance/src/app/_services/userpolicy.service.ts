@@ -44,6 +44,15 @@ export class UserpolicyService {
     }));
   }
 
+  getInsurancePolicyGraphData(year: any){
+    return this.http.get<any>(this.baseUrl + '/policy/home/get_policy_graph/', {
+      params: new HttpParams().append('year', year)
+    })
+    .pipe(map((resp) => {
+      return resp;
+    }));
+  }
+
 
 
 }

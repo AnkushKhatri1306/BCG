@@ -24,7 +24,9 @@ export class UserPolicyComponent implements OnInit {
   pageNumber: number = 1;
   policyData: any;
   policyOptions: any;
+  graphData: any;
   policyPageNumberSearch: number;
+  graphYear: number;
 
   ngOnInit() {
     this.getInsurancePolicyData();
@@ -75,6 +77,8 @@ export class UserPolicyComponent implements OnInit {
       this.policyService.getInsurancePolicyOptions().subscribe(resp => {
         if(resp.status == 'success'){
           this.policyOptions = resp.data;
+          this.graphYear = this.policyOptions.graph_year_list[0];
+          this.getInsurancePolicyGraph(this.graphYear);
           this.callToaster(resp.message, true);
         }
         else{
@@ -137,6 +141,25 @@ export class UserPolicyComponent implements OnInit {
       error => {
 
       });
+    }
+
+
+    getInsurancePolicyGraph(year){
+      // hhere need to trigger popup and set the data for the popup 
+      
+      this.policyService.getInsurancePolicyGraphData(year).subscribe(resp => {
+        if(resp.status == 'success'){
+          this.graphData = resp.data;
+          this.callToaster(resp.message, true);
+        }
+        else{
+            this.callToaster(resp.message, false);
+        }
+      },
+      error => {
+
+      });
+             
     }
 
     callToaster(message, successFlag){

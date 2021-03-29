@@ -1,5 +1,18 @@
 <div class="col-md-12">
     <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="col-md-12">Customer Region</div>
+            <div class="col-md-12">
+                <select  class='form-control' [(ngModel)]="graphYear" [value]='graphYear'
+                            name="region_id">
+                        <option *ngFor="let graph of policyOptions.graph_year_list let graph_index = index" [selected]="graphYear == graph"
+                    [value]="graph">{{ graph }}</option>
+                </select>
+            </div> 
+        </div>
+        <app-chart></app-chart>
+    </div>
+    <div class="col-md-12">
         <div class="col-md-12">
             <div class="col-md-3"></div>
             <div class="col-md-6">

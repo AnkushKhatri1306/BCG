@@ -234,8 +234,8 @@
                         <div class="col-md-6">
                             <div class="">Premium</div>
                             <div class="">
-                                <input type="number" [value]="policyData.premium" [(ngModel)]="policyData.premium"
-                                    name="premium" min="0" max="1000000" required class="form-control" />
+                                <input class="form-control" type="number" [value]="policyData.premium" [(ngModel)]="policyData.premium"
+                                    name="premium" min="0" max="1000000" (change)="checkPremium(policyData.premium)" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -301,7 +301,7 @@
                     </div>
                     <div class="floatRight">
                         <button type="button" class="btn btn-success" (click)="saveInsurancePolicy()"
-                            [disabled]="policyForm.invalid"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            [disabled]="policyForm.invalid || formDisabled"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                             Save</button>
                     </div>
                 </form>

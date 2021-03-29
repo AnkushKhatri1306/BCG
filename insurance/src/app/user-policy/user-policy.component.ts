@@ -17,6 +17,7 @@ export class UserPolicyComponent implements OnInit {
   openPopup: boolean = false; 
   showToaster: boolean = false; 
   successFlag: boolean = false; 
+  formDisabled: boolean = false; 
   policyDataParams: any;
   searchText: any = '';
   toasterMessage: any = '';
@@ -163,6 +164,15 @@ export class UserPolicyComponent implements OnInit {
 
       });
              
+    }
+
+    checkPremium(premium){            
+      if(premium <= 1000000){
+        this.formDisabled = false
+      }
+      else{
+        this.formDisabled = true;
+      }
     }
 
 

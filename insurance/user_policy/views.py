@@ -27,6 +27,7 @@ class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
         RESPONSE (ERROR) : {
             "message": "Error in policy data upload . Please try Again"
         }
+        URL : '/home/data_upload/'
         :param request: request data containing the file object
         :return:
         """
@@ -42,54 +43,45 @@ class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
     def get_policy_list_data(self, request):
         """
         METHOD : GET
-        PERMISSION : ANYONE
-        HEADER TO SEND : {
-            Authorization : Bearer + <space> + <access token>
-        }
-        BODY TO SEND : {
-            "id": <id>
+        PARAMS TO SEND : {
+            "page_size": <page_size>,
+            "page_number": <page_number>,
+            "search_id": <search_id>
         }
         RESPONSE (SUCCESS) : {
             "status": "success",
-            "message": "Success in saving software version."
+            "message": "Success in getting policy list."
         }
         :param request:
         :return:
-        URL: upload/activate_software_version/
+        URL : '/home/list/'
         """
         try:
             success, msg, policy_data = self.get_policy_list(request)
             response_data = get_response_object(success, msg, policy_data)
         except Exception as e:
             exception_detail()
-            response_data = get_response_object(False, 'Error in activating software version.')
+            response_data = get_response_object(False, 'Error in getting policy list.')
         return Response(data=response_data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], url_path='options')
     def get_policy_edit_options_data(self, request):
         """
-        METHOD : POST
-        PERMISSION : ANYONE
-        HEADER TO SEND : {
-            Authorization : Bearer + <space> + <access token>
-        }
-        BODY TO SEND : {
-            "id": <id>
-        }
+        METHOD : GET
         RESPONSE (SUCCESS) : {
             "status": "success",
-            "message": "Success in saving software version."
+            "message": "Success in getting policy options."
         }
         :param request:
         :return:
-        URL: upload/activate_software_version/
+        URL: /home/options/
         """
         try:
             success, msg, options_data = self.get_policy_edit_options(request)
             response_data = get_response_object(success, msg, options_data)
         except Exception as e:
             exception_detail()
-            response_data = get_response_object(False, 'Error in activating software version.')
+            response_data = get_response_object(False, 'Error in getting policy options.')
         return Response(data=response_data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'], url_path='save_policy')
@@ -97,16 +89,28 @@ class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
         """
         METHOD : POST
         BODY TO SEND: {
-            "file": <file in memory object>
+            "bodily_injury_liability": false
+            "collision": true
+            "comprehensive": true
+            "customer_id": 400
+            "fuel_id": "13"
+            "gender": 0
+            "id": 1206
+            "income_group": "0- $25K"
+            "marital_status": false
+            "personal_injury_protection": false
+            "premium": 958
+            "property_damage_liability": false
+            "purchase_date": "2018-01-16"
+            "region_id": 17
+            "vehicle_segment_id": "13"
         }
         RESPONSE (SUCCESS) : {
-            "message": "Success in uploading course sheet ."
+            "message": "Success in saving policy data ."
         }
-        RESPONSE (ERROR) : {
-            "message": "Error in course data upload . Please try Again"
-        }
-        :param request: request data containing the file object
+        :param request:
         :return:
+        URL: /home/save_policy/
         """
         try:
             success, msg = self.create_or_update_policy_data(request)
@@ -119,55 +123,47 @@ class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
     @action(detail=False, methods=['GET'], url_path='get_policy')
     def get_insurance_policy_data(self, request):
         """
-        METHOD : POST
-        PERMISSION : ANYONE
-        HEADER TO SEND : {
-            Authorization : Bearer + <space> + <access token>
-        }
-        BODY TO SEND : {
-            "id": <id>
+        METHOD : GET
+        PARAMS TO SEND : {
+            "policy_id": <id>
         }
         RESPONSE (SUCCESS) : {
             "status": "success",
-            "message": "Success in saving software version."
+            "message": "Success in getting policy data."
         }
         :param request:
         :return:
-        URL: upload/activate_software_version/
+        URL: /home/get_policy/
         """
         try:
             success, msg, options_data = self.get_insurance_policy(request)
             response_data = get_response_object(success, msg, options_data)
         except Exception as e:
             exception_detail()
-            response_data = get_response_object(False, 'Error in activating software version.')
+            response_data = get_response_object(False, 'Error in getting policy data')
         return Response(data=response_data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], url_path='get_policy_graph')
     def get_insurance_policy_graph_details(self, request):
         """
-        METHOD : POST
-        PERMISSION : ANYONE
-        HEADER TO SEND : {
-            Authorization : Bearer + <space> + <access token>
-        }
-        BODY TO SEND : {
-            "id": <id>
+        METHOD : GET
+        PARAMS TO SEND : {
+            "year": <year>
         }
         RESPONSE (SUCCESS) : {
             "status": "success",
-            "message": "Success in saving software version."
+            "message": "Success in getting policy graph data."
         }
         :param request:
         :return:
-        URL: upload/activate_software_version/
+        URL: /home/get_policy_graph/
         """
         try:
             success, msg, options_data = self.get_insurance_policy_graph_data(request)
             response_data = get_response_object(success, msg, options_data)
         except Exception as e:
             exception_detail()
-            response_data = get_response_object(False, 'Error in activating software version.')
+            response_data = get_response_object(False, 'Error in getting policy graph data.')
         return Response(data=response_data, status=status.HTTP_200_OK)
 
 

@@ -160,7 +160,7 @@ class UserPolicyHomeController():
         :return:
         """
         success = False
-        msg = 'Error in getting the Policy data.'
+        msg = 'Error in getting policy list.'
         policy_data = {}
         try:
             page_size = request.GET.get('page_size', 10)
@@ -184,7 +184,7 @@ class UserPolicyHomeController():
             policy_data['end_index'] = page_obj.end_index()
             policy_data['count'] = paginator_obj.count
             success = True
-            msg = 'Success in getting the Policy data.'
+            msg = 'Success in getting policy list.'
         except Exception as e:
             exception_detail()
         return success, msg, policy_data
@@ -193,12 +193,12 @@ class UserPolicyHomeController():
     def get_policy_edit_options(self, request):
         """
         function to get the options list need to be there in edit option of policy data
-        1. getting the data for fuel , vechile_segment and region
+        1. getting the data for fuel , vechile_segment, region and graph year list
         :param request:
         :return:
         """
         success = False
-        msg = 'Error in getting the Policy edit options data.'
+        msg = 'Error in getting policy options.'
         options_data = {}
         try:
             options_data['fuel_list'] = Fuel.objects.filter().values('id', 'name')
@@ -208,7 +208,7 @@ class UserPolicyHomeController():
                 distinct('purchase_date__year').order_by('-purchase_date__year')
             options_data['graph_year_list'] = [obj.get('purchase_date').year for obj in policy_obj]
             success = True
-            msg = 'Success in getting the Policy edit options data.'
+            msg = 'Success in getting policy options.'
         except Exception as e:
             exception_detail()
         return success, msg, options_data
@@ -224,7 +224,7 @@ class UserPolicyHomeController():
         :return:
         """
         success = False
-        msg = 'Error in saving policy data . Please try Again.'
+        msg = 'Error in saving policy data . Please try Again'
         try:
             post_data = request.data
             if post_data:
@@ -248,7 +248,7 @@ class UserPolicyHomeController():
                 customer_obj.marital_status = post_data.get('marital_status')
                 customer_obj.save()
                 success = True
-                msg = 'Success in saving policy data . Please try Again.'
+                msg = 'Success in saving policy data .'
         except Exception as e:
             exception_detail()
         return success, msg
@@ -256,13 +256,14 @@ class UserPolicyHomeController():
 
     def get_insurance_policy(self, request):
         """
-        function to get the options list need to be there in edit option of policy data
-        1. getting the data for fuel , vechile_segment and region
+        Function to get the insurance policy data by policy id
+        1. getting the policy id from request and then using that id for getting data from database
+        2. Serializing it and sending back.
         :param request:
         :return:
         """
         success = False
-        msg = 'Error in getting the Policy edit options data.'
+        msg = 'Error in getting policy data'
         policy_data = {}
         try:
             policy_id = request.GET.get('policy_id')
@@ -271,7 +272,7 @@ class UserPolicyHomeController():
                 policy_serializer = InsurancePolicySerializer(policy_obj)
                 policy_data = policy_serializer.data
             success = True
-            msg = 'Success in getting the Policy edit options data.'
+            msg = 'Success in getting policy data.'
         except Exception as e:
             exception_detail()
         return success, msg, policy_data
@@ -279,13 +280,18 @@ class UserPolicyHomeController():
 
     def get_insurance_policy_graph_data(self, request):
         """
-        function to get the options list need to be there in edit option of policy data
-        1. getting the data for fuel , vechile_segment and region
+        function to get the data in specific format need by the graph to use.
+        1. Getting the year from the request
+        2. If year is there then getting the data for region and making a list of list accordingly
+        3. after making a dict with region name and the list of list as key
+        4. getting the data from database according to the year and increasing the specific month data in ths
+            list of list
+        5. dictionary values sending it back
         :param request:
         :return:
         """
         success = False
-        msg = 'Error in getting graph data.'
+        msg = 'Error in getting policy graph data.'
         graph_data = []
         try:
             year = request.GET.get('year')
@@ -304,12 +310,10 @@ class UserPolicyHomeController():
                     graph_dict[obj.get('region_name')][obj.get('purchase_date').month] += 1
                 graph_data = graph_dict.values()
                 success = True
-                msg = 'Success in getting the Policy edit options data.'
+                msg = 'Success in getting policy graph data.'
             else:
                 msg = 'Error in getting graph data. Please provide year for search'
         except Exception as e:
             exception_detail()
-            import pdb
-            pdb.set_trace()
         return success, msg, graph_data
 

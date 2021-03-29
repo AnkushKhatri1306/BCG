@@ -35,6 +35,15 @@ export class UserpolicyService {
     }));
   }
 
+  getInsurancePolicy(policy_id: any){
+    return this.http.get<any>(this.baseUrl + '/policy/home/get_policy/', {
+      params: new HttpParams().append('policy_id', policy_id)
+    })
+    .pipe(map((resp) => {
+      return resp;
+    }));
+  }
+
 
 
 }

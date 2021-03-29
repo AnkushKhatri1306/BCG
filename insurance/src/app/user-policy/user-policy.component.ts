@@ -20,10 +20,12 @@ export class UserPolicyComponent implements OnInit {
   pageSize: number = 10;
   pageNumber: number = 1;
   policyData: any;
+  policyOptions: any;
   policyPageNumberSearch: number;
 
   ngOnInit() {
     this.getInsurancePolicyData();
+    this.getInsurancePolicyOptions();
 
   }
 
@@ -60,13 +62,34 @@ export class UserPolicyComponent implements OnInit {
       });
     }
 
+    getInsurancePolicyOptions(){
+      this.policyService.getInsurancePolicyOptions().subscribe(resp => {
+        if(resp.status == 'success'){
+          this.policyOptions = resp.data;
+        }
+      },
+      error => {
+
+      });
+    }
+
+    
+
     editInsurancePolicy(policyData: any){
       // hhere need to trigger popup and set the data for the popup 
-      console.log(policyData);
-      $("#showMoreModal").modal('show');
-      this.policyData = policyData;
       
-      
+      console.log(policyData); 
+      this.policyService.getInsurancePolicy(policyData.id).subscribe(resp => {
+        if(resp.status == 'success'){
+          this.policyData = resp.data;
+          this.openPopup = true;
+          $("#showMoreModal").modal('show');     
+        }
+      },
+      error => {
+
+      });
+             
     }
 
     setInsurancePolicyPage(page){
@@ -80,4 +103,18 @@ export class UserPolicyComponent implements OnInit {
       this.getInsurancePolicyData();
     }
 
+    saveInsurancePolicy(){
+      console.log(this.policyData);
+      this.policyService.savePolicyData(this.policyData).subscribe(resp => {
+        if(resp.status == 'success'){
+          $("#showMoreModal").modal('hide');  
+          this.openPopup = false;
+          this.getInsurancePolicyData();
+          
+        }
+      },
+      error => {
+
+      });
+    }
 }

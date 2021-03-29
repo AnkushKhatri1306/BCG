@@ -176,6 +176,9 @@ class UserPolicyHomeController():
             policy_data['total_page'] = paginator_obj.num_pages
             policy_data['has_next'] = page_obj.has_next()
             policy_data['has_previous'] = page_obj.has_previous()
+            policy_data['start_index'] = page_obj.start_index()
+            policy_data['end_index'] = page_obj.end_index()
+            policy_data['count'] = paginator_obj.count
             success = True
             msg = 'Success in getting the Policy data.'
         except Exception as e:

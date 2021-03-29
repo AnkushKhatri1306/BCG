@@ -75,7 +75,7 @@ class InsurancePolicySerializer(serializers.ModelSerializer):
         return comprehensive
 
     def get_gender(self, obj):
-        gender = ''
+        gender = 'Male'
         try:
             if obj.customer.gender:
                 gender = DEFAULT_GENDER_DICT_REVERSE.get(obj.customer.gender)

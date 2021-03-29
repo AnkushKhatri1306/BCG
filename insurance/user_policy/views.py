@@ -65,7 +65,7 @@ class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
             response_data = get_response_object(False, 'Error in activating software version.')
         return Response(data=response_data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['GET'], url_path='list')
+    @action(detail=False, methods=['GET'], url_path='options')
     def get_policy_edit_options_data(self, request):
         """
         METHOD : POST

@@ -34,8 +34,8 @@ export class UserPolicyComponent implements OnInit {
 
   }
 
+  // function to get data for the insurance plolicy and setting the data for displaying into the Html part
   getInsurancePolicyData(){
-
     this.policyDataParams = {
       'page_size': this.pageSize,
       'page_number': this.pageNumber,
@@ -58,6 +58,7 @@ export class UserPolicyComponent implements OnInit {
     });
   }
 
+  // function for saving the insurance policy data 
     saveInsurancePolicyData(){
       this.policyService.savePolicyData(this.policyData).subscribe(resp => {
         if(resp.status == 'success'){
@@ -73,6 +74,7 @@ export class UserPolicyComponent implements OnInit {
       });
     }
 
+    // function for getting the insurance policy options needed while editing the details
     getInsurancePolicyOptions(){
       this.policyService.getInsurancePolicyOptions().subscribe(resp => {
         if(resp.status == 'success'){
@@ -92,10 +94,9 @@ export class UserPolicyComponent implements OnInit {
 
     
 
+    // function to get the detail of specific insurance policy detail 
     editInsurancePolicy(policyData: any){
-      // hhere need to trigger popup and set the data for the popup 
       
-      console.log(policyData); 
       this.policyService.getInsurancePolicy(policyData.id).subscribe(resp => {
         if(resp.status == 'success'){
           this.policyData = resp.data;
@@ -113,6 +114,7 @@ export class UserPolicyComponent implements OnInit {
              
     }
 
+    // function for setting the insurance policy page need to get for showing to the user
     setInsurancePolicyPage(page){
       this.pageNumber = page;
       if(this.pageNumber < 1){
@@ -124,8 +126,9 @@ export class UserPolicyComponent implements OnInit {
       this.getInsurancePolicyData();
     }
 
+
+    // function for saving the insurance policy data 
     saveInsurancePolicy(){
-      console.log(this.policyData);
       this.policyService.savePolicyData(this.policyData).subscribe(resp => {
         if(resp.status == 'success'){
           $("#showMoreModal").modal('hide');  
@@ -144,8 +147,8 @@ export class UserPolicyComponent implements OnInit {
     }
 
 
+    // function for getting the data need for making the chart and show into the Html page
     getInsurancePolicyGraph(year){
-      // hhere need to trigger popup and set the data for the popup 
       
       this.policyService.getInsurancePolicyGraphData(year).subscribe(resp => {
         if(resp.status == 'success'){
@@ -162,6 +165,8 @@ export class UserPolicyComponent implements OnInit {
              
     }
 
+
+    // function for setting the toaster message and flag for showing error or success with timeout
     callToaster(message, successFlag){
       this.toasterMessage = message;
       this.successFlag = successFlag;

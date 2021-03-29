@@ -45,3 +45,11 @@
 .f-s-100px{
     font-size: 100px;
 }
+
+.modelFont{
+    font-size: 11px;
+}
+
+.floatRight{
+    float:right;
+}

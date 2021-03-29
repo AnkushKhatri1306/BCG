@@ -143,6 +143,33 @@ class UserPolicyHomeViewSet(viewsets.ModelViewSet, UserPolicyHomeController):
             response_data = get_response_object(False, 'Error in activating software version.')
         return Response(data=response_data, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['GET'], url_path='get_policy_graph')
+    def get_insurance_policy_graph_details(self, request):
+        """
+        METHOD : POST
+        PERMISSION : ANYONE
+        HEADER TO SEND : {
+            Authorization : Bearer + <space> + <access token>
+        }
+        BODY TO SEND : {
+            "id": <id>
+        }
+        RESPONSE (SUCCESS) : {
+            "status": "success",
+            "message": "Success in saving software version."
+        }
+        :param request:
+        :return:
+        URL: upload/activate_software_version/
+        """
+        try:
+            success, msg, options_data = self.get_insurance_policy_graph_data(request)
+            response_data = get_response_object(success, msg, options_data)
+        except Exception as e:
+            exception_detail()
+            response_data = get_response_object(False, 'Error in activating software version.')
+        return Response(data=response_data, status=status.HTTP_200_OK)
+
 
 
 

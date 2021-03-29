@@ -1,7 +1,7 @@
 from .models import *
 from .serializers import *
 from insurance.utility import exception_detail
-from django.db.models import Q
+from django.db.models import Q, F
 from django.db import transaction
 from insurance.config import *
 import csv
@@ -202,6 +202,9 @@ class UserPolicyHomeController():
             options_data['fuel_list'] = Fuel.objects.filter().values('id', 'name')
             options_data['vehicle_segment_list'] = VehicleSegment.objects.filter().values('id', 'name')
             options_data['region_list'] = Region.objects.filter().values('id', 'name')
+            policy_obj = InsurancePolicy.objects.filter().values('purchase_date').\
+                distinct('purchase_date__year').order_by('-purchase_date__year')
+            options_data['graph_year_list'] = [obj.get('purchase_date').year for obj in policy_obj]
             success = True
             msg = 'Success in getting the Policy edit options data.'
         except Exception as e:
@@ -270,4 +273,41 @@ class UserPolicyHomeController():
         except Exception as e:
             exception_detail()
         return success, msg, policy_data
+
+
+    def get_insurance_policy_graph_data(self, request):
+        """
+        function to get the options list need to be there in edit option of policy data
+        1. getting the data for fuel , vechile_segment and region
+        :param request:
+        :return:
+        """
+        success = False
+        msg = 'Error in getting graph data.'
+        graph_data = []
+        try:
+            year = request.GET.get('year')
+            if year:
+                graph_dict = {}
+                region_list = Region.objects.filter().values('id', 'name').order_by('name')
+                # way of doing [0] * 12 will having reference problem
+                for region in region_list:
+                    temp_list = [region.get('name')]
+                    temp_list.extend([0 for month in range(12)])
+                    graph_dict[region.get('name')] = temp_list
+                policy_obj = InsurancePolicy.objects.filter(purchase_date__year=year) \
+                    .select_related('customer__region__name')\
+                    .values('purchase_date', region_name=F('customer__region__name'))
+                for obj in policy_obj:
+                    graph_dict[obj.get('region_name')][obj.get('purchase_date').month] += 1
+                graph_data = graph_dict.values()
+                success = True
+                msg = 'Success in getting the Policy edit options data.'
+            else:
+                msg = 'Error in getting graph data. Please provide year for search'
+        except Exception as e:
+            exception_detail()
+            import pdb
+            pdb.set_trace()
+        return success, msg, graph_data
 

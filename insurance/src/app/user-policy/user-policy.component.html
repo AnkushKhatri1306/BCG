@@ -1,1 +1,104 @@
-<p>user-policy works!</p>
+<div class="col-md-12">
+    <div class="col-md-12">
+        <table class="col-md-12 table table-hover table-bordered">
+            <thead>
+                <tr class="col-md-12">
+                    <th>S.No.</th>
+                    <th>Policy ID</th>
+                    <th>Date Of Purchase</th>
+                    <th>Customer ID</th>
+                    <th>Fuel</th>
+                    <th>Vehicle Segment</th>
+                    <th>Premium</th>
+                    <th>Bodily Injury Liability</th>
+                    <th>Personal Injury Protection</th>
+                    <th>Property Damage Liability</th>
+                    <th>Collision</th>
+                    <th>Comprehensive</th>
+                    <th>Customer Gender</th>
+                    <th>Customer Income Group</th>
+                    <th>Customer Region</th>
+                    <th>Customer Marital status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr *ngIf="false" class="text-center saListBody">
+                    <td scope="row" colspan="12" style="text-align: center;">
+                        
+                    </td>
+                </tr> -->
+                <ng-container>
+                    <tr *ngFor="let policyData of policyDataList; let index=index;"
+                        class="">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ policyData.id }}</td>
+                        <td>{{ policyData.purchase_date }}</td>
+                        <td>{{ policyData.customer_id }}</td>
+                        <td>{{ policyData.fuel_name }}</td>
+                        <td>{{ policyData.vehicle_segment_name }}</td>
+                        <td>{{ policyData.premium }}</td>
+                        <td>{{ policyData.bodily_injury_liability }}</td>
+                        <td>{{ policyData.personal_injury_protection }}</td>
+                        <td>{{ policyData.property_damage_liability }}</td>
+                        <td>{{ policyData.collision }}</td>
+                        <td>{{ policyData.comprehensive }}</td>
+                        <td>{{ policyData.gender }}</td>
+                        <td>{{ policyData.income_group }}</td>
+                        <td>{{ policyData.region_name }}</td>
+                        <td>{{ policyData.marital_status }}</td>
+                        <td>
+                            <a class="hand-pointer" title="Edit" (click)="editInsurancePolicy(policyData)">
+                                <i class="fa fa-edit color-blue"></i></a>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+        <div class="col-md-12 p-b-20px p-t-10px row" *ngIf="getPolicyResponseData">
+                
+            <div class="col-md-4">
+                Page : {{ pageNumber }} of {{ getPolicyResponseData.total_page }}
+            </div>      
+            <div class="col-md-4">
+                Showing {{ getPolicyResponseData.start_index }} - {{ getPolicyResponseData.end_index }} of {{ getPolicyResponseData.count }}
+                <input class="col-md-2"  title="press enter after number" min="1" [(ngModel)]="policyPageNumberSearch" (keyup.enter)="setInsurancePolicyPage(policyPageNumberSearch)" type="number">
+            </div>          
+            <div class="col-md-4 t-a-r f-s-20px">
+                <span [ngClass]="getPolicyResponseData.has_previous ? 'active' : 'unactive'" class="m-r-10px" 
+                 (click)="setInsurancePolicyPage(1)" title="First page">
+                    <i class="fa fa-angle-double-left"></i>
+                </span>
+                <span [ngClass]=" getPolicyResponseData.has_previous ? 'active' : 'unactive'" 
+                    (click)="setInsurancePolicyPage(pageNumber - 1)" class="m-r-10px" title="Previous page">
+                    <i class="fa fa-angle-left"></i>
+                </span>
+                <span [ngClass]=" getPolicyResponseData.has_next ? 'active' : 'unactive' " (click)="setInsurancePolicyPage(pageNumber + 1)" 
+                        class="m-r-10px" title="Next page">
+                    <i class="fa fa-angle-right"></i>
+                </span>
+                <span [ngClass]=" getPolicyResponseData.has_next ? 'active' : 'unactive' " (click)="setInsurancePolicyPage(getPolicyResponseData.total_page)" 
+                        class="m-r-10px" title="Last page">
+                    <i class="fa fa-angle-double-right"></i>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+    <div class="modal fade" id="showMoreModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Value</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        {{ policyData | json }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 

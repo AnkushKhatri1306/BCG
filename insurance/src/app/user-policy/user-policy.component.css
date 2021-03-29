@@ -1,0 +1,21 @@
+.active{
+    cursor: pointer;
+}
+.unactive{
+    opacity: 0.5;
+}
+.p-b-20px{
+    padding-bottom: 20px;
+}
+.p-t-10px{
+    padding-top: 10px;
+}
+.t-a-r{
+    text-align: right;
+}
+.f-s-20px{
+    font-size: 20px;
+}
+.m-r-10px{
+    margin-right: 10px;
+}
